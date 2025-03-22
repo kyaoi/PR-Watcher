@@ -5,9 +5,10 @@
 	"action": {
 		"default_popup": "index.html"
 	},
-	"permissions": ["activeTab", "storage", "identity"],
-	"host_permissions": [
-		"https://api.github.com/*",
-		"https://pr-watcher-server.vercel.app/*"
-	]
+	"background": {
+		"service_worker": "src/background.ts",
+		"type": "module"
+	},
+	"permissions": ["storage", "alarms"],
+	"host_permissions": ["https://api.github.com/*"]
 }
