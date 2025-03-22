@@ -8,6 +8,6 @@
 	"permissions": ["activeTab", "storage", "identity"],
 	"host_permissions": [
 		"https://api.github.com/*",
-		"https://your-backend.vercel.app/*"
+		"https://pr-watcher-server.vercel.app/*"
 	]
 }

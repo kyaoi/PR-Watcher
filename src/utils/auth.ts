@@ -1,5 +1,6 @@
 const CLIENT_ID = import.meta.env.VITE_GITHUB_CLIENT_ID;
 const REDIRECT_URI = import.meta.env.VITE_GITHUB_REDIRECT_URI;
+const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
 export async function loginWithGitHub() {
 	return new Promise<string | null>(async (resolve, reject) => {
@@ -26,14 +27,11 @@ export async function loginWithGitHub() {
 			}
 
 			// バックエンドにcodeを渡してトークンを取得
-			const response = await fetch(
-				'https://YOUR_BACKEND.vercel.app/api/auth/github',
-				{
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify({ code }),
-				},
-			);
+			const response = await fetch(`${SERVER_URL}/api`, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ code }),
+			});
 
 			const data = await response.json();
 			const accessToken = data.access_token;
