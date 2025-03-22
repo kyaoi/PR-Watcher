@@ -1,7 +1,9 @@
 {
 	"manifest_version": 3,
-	"name": "pr watcher",
 	"version": "1.0.0",
+	"name": "PR Watcher",
+	"description": "__MSG_extensionDescription__",
+	"default_locale": "en",
 	"icons": {
 		"16": "icon16.png",
 		"48": "icon48.png",
