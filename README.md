@@ -1,3 +1,5 @@
+🔤 [View this README in English](./README.en.md)
+
 # 🚀 PR Watcher - GitHubのレビュー依頼を見逃さない Chrome 拡張
 
 ![badge](https://img.shields.io/badge/status-active-brightgreen)
