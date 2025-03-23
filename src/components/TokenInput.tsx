@@ -25,7 +25,7 @@ export function TokenInput({ setToken }: Props) {
 	return (
 		<div className="space-y-3">
 			<p className="text-base text-gray-700 dark:text-gray-200">
-				GitHubのアクセストークンを入力してください：
+				アクセストークンを入力してください：
 			</p>
 			<div className="relative">
 				<input
@@ -37,7 +37,7 @@ export function TokenInput({ setToken }: Props) {
 				/>
 				<button
 					type="button"
-					className="absolute top-3 right-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+					className="absolute top-3 right-2 cursor-pointer text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
 					onClick={() => setShowToken(!showToken)}
 				>
 					{showToken ? <Eye size={18} /> : <EyeOff size={18} />}
@@ -45,7 +45,7 @@ export function TokenInput({ setToken }: Props) {
 			</div>
 			<button
 				type="button"
-				className="w-full rounded-lg bg-blue-500 px-4 py-2 font-semibold text-base text-white hover:bg-blue-600"
+				className="w-full cursor-pointer rounded-lg bg-blue-500 px-4 py-2 font-semibold text-base text-white hover:bg-blue-600"
 				onClick={handleSave}
 				disabled={saving || !tokenInput}
 			>
@@ -77,6 +77,7 @@ export function TokenInput({ setToken }: Props) {
 					を選択し、
 					<strong className="font-semibold">「repo」スコープ</strong>
 					にのみチェックを入れてください。
+					<br />※ 必要以上に権限をつけるのはおすすめしません。
 				</p>
 				<ul className="mb-2 ml-2 list-inside list-disc">
 					<li>
