@@ -13,8 +13,8 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
 		return;
 	}
 
-	const isActive = chrome.storage.local.get(['enableBackgroundFetch']);
-	if (!isActive) {
+	const { enableBackgroundFetch } = await chrome.storage.local.get(['enableBackgroundFetch']);
+	if (!enableBackgroundFetch) {
 		return;
 	}
 
