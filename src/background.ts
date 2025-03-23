@@ -5,25 +5,19 @@ chrome.runtime.onInstalled.addListener(() => {
 });
 
 chrome.alarms.onAlarm.addListener(async (alarm) => {
-	const { githubAccessToken } = await chrome.storage.local.get([
-		'githubAccessToken',
-	]);
-
-	if (!githubAccessToken) {
-		return;
-	}
-
-	const { enableBackgroundFetch } = await chrome.storage.local.get(['enableBackgroundFetch']);
-	if (!enableBackgroundFetch) {
-		return;
-	}
-
-	if (alarm.name === 'fetchPRs') {
-		const { prCount, timestamp } = await chrome.storage.local.get([
+	const { enableBackgroundFetch, githubAccessToken, prCount, timestamp } =
+		await chrome.storage.local.get([
+			'enableBackgroundFetch',
+			'githubAccessToken',
 			'prCount',
 			'timestamp',
 		]);
 
+	if (!(githubAccessToken && enableBackgroundFetch)) {
+		return;
+	}
+
+	if (alarm.name === 'fetchPRs') {
 		const now = Date.now();
 		const isRecent = timestamp && now - timestamp < 1000 * 60 * 5;
 
