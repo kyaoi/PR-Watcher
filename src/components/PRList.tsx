@@ -24,64 +24,62 @@ export function PRList({ token, onCountChange }: Props) {
 	const [prs, setPrs] = useState<PR[]>([]);
 	const [loading, setLoading] = useState(true);
 
-	const fetchPRs = async () => {
-		try {
-			const query = `
-query {
-  search(query: "is:open is:pr review-requested:@me", type: ISSUE, first: 100) {
-
-    edges {
-      node {
-        ... on PullRequest {
-          title
-          url
-          createdAt
-          repository {
-            nameWithOwner
-          }
-          author {
-            login
-          }
-        }
-      }
-    }
-  }
-}`;
-			const res = await fetch(GITHUB_GRAPHQL_API, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: `Bearer ${token}`,
-				},
-				body: JSON.stringify({ query }),
-			});
-
-			const data = await res.json();
-			const prNodes = data?.data?.search?.edges || [];
-
-			setPrs(prNodes);
-			onCountChange?.(prNodes.length);
-
-			// ✅ 件数と取得時間を chrome.storage に保存
-			await chrome.storage.local.set({
-				prCount: prNodes.length,
-				timestamp: Date.now(),
-			});
-			await chrome.action.setBadgeText({
-				text: prNodes.length > 0 ? `${prNodes.length}` : '',
-			});
-			await chrome.action.setBadgeBackgroundColor({ color: '#dc2626' });
-		} catch (e) {
-			console.error('PR取得失敗:', e);
-		} finally {
-			setLoading(false);
-		}
-	};
 	// biome-ignore lint:
 	useEffect(() => {
+		const fetchPRs = async () => {
+			try {
+				const query = `
+          query {
+            search(query: "is:open is:pr review-requested:@me", type: ISSUE, first: 100) {
+              edges {
+                node {
+                  ... on PullRequest {
+                    title
+                    url
+                    createdAt
+                    repository {
+                      nameWithOwner
+                    }
+                    author {
+                      login
+                    }
+                  }
+                }
+              }
+            }
+          }`;
+				const res = await fetch(GITHUB_GRAPHQL_API, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+						Authorization: `Bearer ${token}`,
+					},
+					body: JSON.stringify({ query }),
+				});
+
+				const data = await res.json();
+				const prNodes = data?.data?.search?.edges || [];
+
+				setPrs(prNodes);
+				onCountChange?.(prNodes.length);
+
+				// ✅ 件数と取得時間を chrome.storage に保存
+				await chrome.storage.local.set({
+					prCount: prNodes.length,
+					timestamp: Date.now(),
+				});
+				await chrome.action.setBadgeText({
+					text: prNodes.length > 0 ? `${prNodes.length}` : '',
+				});
+				await chrome.action.setBadgeBackgroundColor({ color: '#dc2626' });
+			} catch (e) {
+				console.error('PR取得失敗:', e);
+			} finally {
+				setLoading(false);
+			}
+		};
+
 		fetchPRs();
-		const timer = setInterval(fetchPRs, 5 * 60 * 1000);
-		return () => clearInterval(timer);
 	}, [token]);
 
 	if (loading) return <p>⏳ PRを取得中...</p>;
