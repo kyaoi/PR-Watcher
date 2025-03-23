@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { PRList, ThemeToggle, TokenInput } from './components';
+import { BackgroundToggle } from './components/BackgroundToggle';
 
 export default function Popup() {
 	const [token, setToken] = useState<string | null>(null);
@@ -24,7 +25,7 @@ export default function Popup() {
 
 	return (
 		<div className="min-h-[500px] w-[380px] p-6 text-base dark:bg-zinc-900 dark:text-white">
-			<div className="mb-5 flex items-center justify-between">
+			<div className="mb-3 flex items-center justify-between">
 				<h1 className="font-bold text-2xl">
 					📥 Review PRs{prCount > 0 ? ` (${prCount})` : ''}
 				</h1>
@@ -32,6 +33,7 @@ export default function Popup() {
 			</div>
 			{token ? (
 				<>
+					<BackgroundToggle />
 					<PRList token={token} onCountChange={setPrCount} />
 					<button
 						type="button"
