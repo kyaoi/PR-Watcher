@@ -5,6 +5,19 @@ chrome.runtime.onInstalled.addListener(() => {
 });
 
 chrome.alarms.onAlarm.addListener(async (alarm) => {
+	const { githubAccessToken } = await chrome.storage.local.get([
+		'githubAccessToken',
+	]);
+
+	if (!githubAccessToken) {
+		return;
+	}
+
+	const isActive = chrome.storage.local.get(['enableBackgroundFetch']);
+	if (!isActive) {
+		return;
+	}
+
 	if (alarm.name === 'fetchPRs') {
 		const { prCount, timestamp } = await chrome.storage.local.get([
 			'prCount',
@@ -20,21 +33,12 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
 			chrome.action.setBadgeBackgroundColor({ color: '#dc2626' });
 		} else {
 			console.log('🌐 再取得: PR件数');
-			await checkPRs();
+			await checkPRs(githubAccessToken);
 		}
 	}
 });
 
-async function checkPRs() {
-	const { githubAccessToken } = await chrome.storage.local.get([
-		'githubAccessToken',
-	]);
-
-	if (!githubAccessToken) {
-		chrome.action.setBadgeText({ text: '' });
-		return;
-	}
-
+async function checkPRs(token: string) {
 	const query = `
     query {
       search(query: "is:open is:pr review-requested:@me", type: ISSUE, first: 100) {
@@ -47,7 +51,7 @@ async function checkPRs() {
 		const res = await fetch(GITHUB_GRAPHQL_API, {
 			method: 'POST',
 			headers: {
-				Authorization: `Bearer ${githubAccessToken}`,
+				Authorization: `Bearer ${token}`,
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({ query }),
