@@ -1,39 +1,39 @@
 import { GITHUB_GRAPHQL_API } from './utils';
 
 chrome.runtime.onInstalled.addListener(() => {
-	chrome.alarms.create('fetchPRs', { periodInMinutes: 5 });
+  chrome.alarms.create('fetchPRs', { periodInMinutes: 5 });
 });
 
 chrome.alarms.onAlarm.addListener(async (alarm) => {
-	const { enableBackgroundFetch, githubAccessToken, prCount, timestamp } =
-		await chrome.storage.local.get([
-			'enableBackgroundFetch',
-			'githubAccessToken',
-			'prCount',
-			'timestamp',
-		]);
+  const { enableBackgroundFetch, githubAccessToken, prCount, timestamp } =
+    await chrome.storage.local.get([
+      'enableBackgroundFetch',
+      'githubAccessToken',
+      'prCount',
+      'timestamp',
+    ]);
 
-	if (!(githubAccessToken && enableBackgroundFetch)) {
-		return;
-	}
+  if (!(githubAccessToken && enableBackgroundFetch)) {
+    return;
+  }
 
-	if (alarm.name === 'fetchPRs') {
-		const now = Date.now();
-		const isRecent = timestamp && now - timestamp < 1000 * 60 * 5;
+  if (alarm.name === 'fetchPRs') {
+    const now = Date.now();
+    const isRecent = timestamp && now - timestamp < 1000 * 60 * 5;
 
-		if (isRecent) {
-			console.log('🔁 使用: 保存されたPR件数');
-			chrome.action.setBadgeText({ text: prCount > 0 ? `${prCount}` : '' });
-			chrome.action.setBadgeBackgroundColor({ color: '#dc2626' });
-		} else {
-			console.log('🌐 再取得: PR件数');
-			await checkPRs(githubAccessToken);
-		}
-	}
+    if (isRecent) {
+      console.log('🔁 使用: 保存されたPR件数');
+      chrome.action.setBadgeText({ text: prCount > 0 ? `${prCount}` : '' });
+      chrome.action.setBadgeBackgroundColor({ color: '#dc2626' });
+    } else {
+      console.log('🌐 再取得: PR件数');
+      await checkPRs(githubAccessToken);
+    }
+  }
 });
 
 async function checkPRs(token: string) {
-	const query = `
+  const query = `
     query {
       search(query: "is:open is:pr review-requested:@me", type: ISSUE, first: 100) {
         issueCount
@@ -41,23 +41,23 @@ async function checkPRs(token: string) {
     }
   `;
 
-	try {
-		const res = await fetch(GITHUB_GRAPHQL_API, {
-			method: 'POST',
-			headers: {
-				Authorization: `Bearer ${token}`,
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({ query }),
-		});
+  try {
+    const res = await fetch(GITHUB_GRAPHQL_API, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ query }),
+    });
 
-		const data = await res.json();
-		const count: number = data?.data?.search?.issueCount || 0;
+    const data = await res.json();
+    const count: number = data?.data?.search?.issueCount || 0;
 
-		chrome.action.setBadgeText({ text: count > 0 ? `${count}` : '' });
-		chrome.action.setBadgeBackgroundColor({ color: '#dc2626' });
-	} catch (e) {
-		console.error('❌ PR取得失敗:', e);
-		chrome.action.setBadgeText({ text: '!' });
-	}
+    chrome.action.setBadgeText({ text: count > 0 ? `${count}` : '' });
+    chrome.action.setBadgeBackgroundColor({ color: '#dc2626' });
+  } catch (e) {
+    console.error('❌ PR取得失敗:', e);
+    chrome.action.setBadgeText({ text: '!' });
+  }
 }
