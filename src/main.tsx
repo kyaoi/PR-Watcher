@@ -4,7 +4,7 @@ import './global.css';
 import Popup from './popup.tsx';
 
 createRoot(document.getElementById('root')!).render(
-	<StrictMode>
-		<Popup />
-	</StrictMode>,
+  <StrictMode>
+    <Popup />
+  </StrictMode>,
 );
