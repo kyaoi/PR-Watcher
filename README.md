@@ -73,10 +73,10 @@ GitHub 上で「自分にレビューが依頼されている Pull Request」を
 ## 📸 スクリーンショット
 
 ### Light mode
-<p align="center"> <img src="https://github.com/user-attachments/assets/6baf8284-bd5d-4a76-a6f2-6acf844f26b9" width="350" /> <img src="https://github.com/user-attachments/assets/dc5063d6-3e67-484c-8801-82455b71fa41" width="350" style="margin-left: 16px;" /> </p>
+<p align="center"> <img src="https://github.com/user-attachments/assets/162ae81e-3700-441f-8ff3-d7c7c88cf324" width="350" /> <img src="https://github.com/user-attachments/assets/8b7b2daf-caf2-409d-9ad5-557ff7856b57" width="350" style="margin-left: 16px;" /> </p>
 
 ### Dark mode
-<p align="center">  <img src="https://github.com/user-attachments/assets/b77498a1-6ec2-402a-a38f-41bc89951d56" width="350" /> <img src="https://github.com/user-attachments/assets/f31a7dbe-7770-4449-88af-04d5d94cfb1f" width="350" style="margin-left: 16px;"  /></p>
+<p align="center">  <img src="https://github.com/user-attachments/assets/0fc1a191-e15c-42aa-9d0e-ed1779744671" width="350" /> <img src="https://github.com/user-attachments/assets/17b5557a-c3cb-4cf6-9598-e17077dfbcfd" width="350" style="margin-left: 16px;"  /></p>
 
 ---
 
